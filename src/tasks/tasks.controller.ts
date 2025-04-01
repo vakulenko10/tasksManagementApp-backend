@@ -21,13 +21,13 @@ export class TasksController {
     @Param('id') id: string,
     @Body() body: { title: string; description: string; isCompleted: boolean },
   ) {
-    await this.tasksService.updateTask(+id, body.title, body.description, body.isCompleted);
+    await this.tasksService.updateTask(id, body.title, body.description, body.isCompleted);
     return { message: 'Task updated' };
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    await this.tasksService.deleteTask(+id);
+    await this.tasksService.deleteTask(id);
     return { message: 'Task deleted' };
   }
 }
