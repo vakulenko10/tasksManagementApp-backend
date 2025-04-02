@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -6,8 +6,17 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  async getAll() {
-    return await this.tasksService.getAllTasks();
+  async getAll(
+    @Query('q') query?: string,
+    @Query('completed') completed?: string,)
+    {
+    if (query) {
+      return this.tasksService.searchTasks(query);
+    }
+    if (completed !== undefined) {
+      return this.tasksService.filterTasksByStatus(completed === 'true');
+    }
+    return this.tasksService.getAllTasks();
   }
 
   @Post()

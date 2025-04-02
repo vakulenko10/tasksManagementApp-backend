@@ -27,4 +27,18 @@ export class TasksService {
   async deleteTask(id: string): Promise<void> {
     await this.db.getClient().query('DELETE FROM tasks WHERE id = $1', [id]);
   }
+  async searchTasks(query: string): Promise<any[]> {
+    const res = await this.db.getClient().query(
+      `SELECT * FROM tasks WHERE title ILIKE $1 OR description ILIKE $1 ORDER BY id`,
+      [`%${query}%`]
+    );
+    return res.rows;
+  }
+  async filterTasksByStatus(isCompleted: boolean): Promise<any[]> {
+    const res = await this.db.getClient().query(
+      'SELECT * FROM tasks WHERE is_completed = $1 ORDER BY id',
+      [isCompleted],
+    );
+    return res.rows;
+  }
 }
